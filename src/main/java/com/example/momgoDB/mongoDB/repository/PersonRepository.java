@@ -17,7 +17,8 @@ public interface PersonRepository extends MongoRepository<Person, String> {
 
     //List<Person> findByAgeBetween(Integer min , Integer max); //named method , but we will now see same with Query.
 
-    @Query(value="{'age' : {$gt : ?0 , $lt : ?1}}") //age field should be greater than 1st parameter and less that 2nd parameter.
+    @Query(value="{'age' : {$gt : ?0 , $lt : ?1}}" , fields = "{addresses : 0}") //age field should be greater than 1st parameter and less that 2nd parameter.
+    //fields which are set to 0 will not come in output , 1 means chahiye 0 means nahi chahiye.
     List<Person> getByPersonAge(Integer minAge , Integer maxAge);
 
 
