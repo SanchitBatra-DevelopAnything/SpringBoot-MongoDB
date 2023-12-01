@@ -2,10 +2,16 @@ package com.example.momgoDB.mongoDB.service;
 
 import com.example.momgoDB.mongoDB.collection.Person;
 import com.example.momgoDB.mongoDB.repository.PersonRepository;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -73,5 +79,21 @@ public class PersonServiceImpl implements PersonService{
 
         //find(query) will return list , map to person.class , then pageable will happen on that list , ()-> used to get the count.
         return people;
+    }
+
+    @Override
+    public List<Document> getOldestPersonByCity() {
+        // we're talking on person but city is in address which is in person.
+        //Unwind addresses , Aggregation performed, sort all data based on age , then group on city.
+        UnwindOperation unwindOperation = Aggregation.unwind("addresses"); //flattens out all the addresses. unwrapped.
+        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC , "age"); //sort based on age.
+        GroupOperation groupOperation = Aggregation.group("addresses.city").first(Aggregation.ROOT).as("OLDEST_PERSON"); //group based on city and take first document. as oldest person as it was sorted in desc already.
+
+        Aggregation aggregation = Aggregation.newAggregation(unwindOperation , sortOperation , groupOperation);
+
+        List<Document> person = mongoTemplate.aggregate(aggregation , Person.class
+         , Document.class).getMappedResults(); //aggregation , input person , output document.
+
+        return person;
     }
 }

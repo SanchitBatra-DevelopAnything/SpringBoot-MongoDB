@@ -2,6 +2,7 @@ package com.example.momgoDB.mongoDB.controller;
 
 import com.example.momgoDB.mongoDB.collection.Person;
 import com.example.momgoDB.mongoDB.service.PersonService;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,5 +55,12 @@ public class PersonController {
     {
         Pageable pageable = PageRequest.of(page , size);
         return personService.search(name , minAge , maxAge , city , pageable);
+    }
+
+    @GetMapping("/oldestPerson")
+    public List<Document> getOldestPerson()
+    {
+        //Document from org.bson , cuz mongo stores data in binary json format.
+        return personService.getOldestPersonByCity();
     }
 }
