@@ -61,6 +61,37 @@ public class PersonController {
     public List<Document> getOldestPerson()
     {
         //Document from org.bson , cuz mongo stores data in binary json format.
+        //RESPONSE will be like :
+//        [
+//        {
+//            "_id": "haryana",
+//                "OLDEST_PERSON": {
+//            "_id": {
+//                "timestamp": 1701349428,
+//                        "date": "2023-11-30T13:03:48.000+00:00"
+//            },
+//            "firstName": "Sanchit",
+//                    "lastName": "Dawoodi",
+//                    "age": 25,
+//                    "hobbies": [
+//            "Chess"
+//            ],
+//            "addresses": {
+//                "address1": "bangalore",
+//                        "address2": "bhiwaani",
+//                        "city": "haryana"
+//            },
+//            "_class": "com.example.momgoDB.mongoDB.collection.Person"
+//        }
+//        }
+//]
         return personService.getOldestPersonByCity();
+    }
+
+    @GetMapping("/populationByCity")
+    public List<Document> getPopulationByCity()
+    {
+        //sample response : [{"city" : "Ahemdabad" , "count" : 7} , {"city" : "Kerela" , "count" : 2}]
+       return personService.getPopulationByCity();
     }
 }
