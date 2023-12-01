@@ -9,3 +9,8 @@ Sample of a save command of a person collection
 
 
 ![image](https://github.com/SanchitBatra-DevelopAnything/SpringBoot-MongoDB/assets/61592754/72eb1d99-70ba-43ab-8b88-353a22eebb35)
+
+-------------------------------------
+
+Also has person entity aggregations performed
+Also has handling of uploading & downloading photos as binary.
